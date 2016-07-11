@@ -4,7 +4,7 @@ namespace LincolnBrito\LaravelBaseRepositories\Criteria\Criterias;
 use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
 
-class LessThan extends Criteria {
+class EqualsCriteria extends Criteria {
 
     /** @var  string */
     protected $attribute;
@@ -28,7 +28,7 @@ class LessThan extends Criteria {
      * @return mixed
      */
     public function apply($model, Repository $repository) {
-        $query = $model->where($this->attribute, '<', $this->value);
+        $query = $model->where($this->attribute, $this->value);
         return $query;
     }
 }
