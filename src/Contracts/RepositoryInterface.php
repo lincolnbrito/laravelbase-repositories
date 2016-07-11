@@ -1,6 +1,10 @@
 <?php
 namespace LincolnBrito\LaravelBaseRepositories\Contracts;
 
+/**
+ * Interface RepositoryInterface
+ * @package LincolnBrito\LaravelBaseRepositories\Contracts
+ */
 interface RepositoryInterface {
 
     /**

@@ -1,16 +1,20 @@
 <?php
 namespace LincolnBrito\LaravelBaseRepositories\Eloquent;
 
+use LincolnBrito\LaravelBaseRepositories\Contracts\CriteriaInterface;
+use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface;
 use LincolnBrito\LaravelBaseRepositories\Exceptions\RepositoryException;
+
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Container\Container as App;
 
 /**
  * Class Repository
  * @package LincolnBrito\LaravelBaseRepositories\Eloquent
  */
-abstract class Repository implements RepositoryInterface {
+abstract class Repository implements RepositoryInterface, CriteriaInterface {
 
     /** @var  App */
     private $app;
@@ -18,13 +22,22 @@ abstract class Repository implements RepositoryInterface {
     /** @var  \Illuminate\Database\Eloquent\Model */
     protected $model;
 
+    /** @var Collection */
+    protected $criteria;
+
+    /** @var bool */
+    protected $skipCriteria = false;
+
     /**
      * Repository constructor.
      *
      * @param App $app
+     * @param Collection $collection
      */
-    public function __construct(App $app) {
+    public function __construct(App $app, Collection $collection) {
         $this->app = $app;
+        $this->criteria = $collection;
+        $this->resetScope();
         $this->makeModel();
     }
 
@@ -40,6 +53,7 @@ abstract class Repository implements RepositoryInterface {
      * @return mixed
      */
     public function all($columns = array('*')){
+        $this->applyCriteria();
         return $this->model->get($columns);
     }
 
@@ -49,6 +63,7 @@ abstract class Repository implements RepositoryInterface {
      * @return mixed
      */
     public function paginate($perPage = 15, $columns = array('*')) {
+        $this->applyCriteria();
         return $this->model->paginate($perPage, $columns);
     }
 
@@ -84,6 +99,7 @@ abstract class Repository implements RepositoryInterface {
      * @return mixed
      */
     public function find($id, $columns = array('*')) {
+        $this->applyCriteria();
         return $this->model->find($id, $columns);
     }
 
@@ -94,6 +110,7 @@ abstract class Repository implements RepositoryInterface {
      * @return mixed
      */
     public function findBy($attribute, $value, $columns = array('*')) {
+        $this->applyCriteria();
         return $this->model->where($attribute, '=', $value)->first($columns);
     }
 
@@ -110,4 +127,60 @@ abstract class Repository implements RepositoryInterface {
         return $this->model = $model->newQuery();
     }
 
+    /**
+     * @return $this
+     */
+    public function resetScope() {
+        $this->skipCriteria(false);
+        return $this;
+    }
+
+    /**
+     * @param bool $status
+     * @return $this
+     */
+    public function skipCriteria($status = true) {
+        $this->skipCriteria = $status;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCriteria() {
+        return $this->criteria;
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @return $this
+     */
+    public function getByCriteria(Criteria $criteria) {
+        $this->model = $criteria->apply( $this->model, $this );
+        return $this;
+    }
+
+    /**
+     * @param Criteria $criteria
+     * @return $this
+     */
+    public function pushCriteria(Criteria $criteria) {
+        $this->criteria->push($criteria);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function applyCriteria() {
+        if( $this->skipCriteria() === true )
+            return $this;
+
+        foreach ($this->getCriteria() as $criteria) {
+            if( $criteria instanceof Criteria)
+               $this->model = $criteria->apply( $this->model, $this);
+        }
+
+        return $this;
+    }
 }
