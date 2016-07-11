@@ -9,11 +9,11 @@ interface RepositoryInterface {
 
     public function create(array $data);
 
-    public function update(array $data, $id);
+    public function update(array $data, $id, $attribute = "id");
 
-    public function delete($id);
+    public function delete(array $ids);
 
     public function find($id, $columns = array('*'));
 
-    public function findBy($field, $value, $columns = array('*'));
+    public function findBy($attribute, $value, $columns = array('*'));
 }
