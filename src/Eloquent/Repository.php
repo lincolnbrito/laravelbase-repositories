@@ -6,6 +6,7 @@ use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface;
 use LincolnBrito\LaravelBaseRepositories\Exceptions\RepositoryException;
 
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container as App;
@@ -179,6 +180,21 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface {
         foreach ($this->getCriteria() as $criteria) {
             if( $criteria instanceof Criteria)
                $this->model = $criteria->apply( $this->model, $this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function search(Request $request) {
+        $namespace = substr(get_called_class(), 0, strrpos(get_called_class(), '\\'))."\\Criterias\\";
+
+        foreach ($request->all() as $criteriaName => $value) {
+            $className = $namespace.str_replace(' ', '', ucwords(str_replace('_', ' ', $criteriaName)));
+            $this->pushCriteria($this->app->make($className,[$value]));
         }
 
         return $this;
