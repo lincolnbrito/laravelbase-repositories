@@ -198,7 +198,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface {
             $className = $namespace.str_replace(' ', '', ucwords(str_replace('_', ' ', $criteriaName)));
             if(!class_exists($className))
                 throw new CriteriaException("The criteria class $className doesn't exists");
-            $this->pushCriteria($this->app->make($className,[$request]));
+            $this->pushCriteria($this->app->make($className,[$value]));
         }
 
         return $this;

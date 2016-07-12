@@ -6,16 +6,6 @@ use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Reposi
 
 abstract class Criteria {
 
-    protected $params;
-
-    /**
-     * Criteria constructor.
-     * @param $params
-     */
-    public function __construct(Request $params) {
-        $this->params = $params;
-    }
-
     /**
      * @param $model
      * @param Repository $repository
