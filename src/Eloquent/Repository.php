@@ -113,7 +113,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface {
      */
     public function findBy($attribute, $value, $columns = array('*')) {
         $this->applyCriteria();
-        return $this->model->where($attribute, '=', $value)->first($columns);
+        return $this->model->where($attribute, '=', $value)->get($columns);
     }
 
     /**
