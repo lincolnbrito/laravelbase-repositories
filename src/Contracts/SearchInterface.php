@@ -8,5 +8,5 @@ use LincolnBrito\LaravelBaseRepositories\Search\Search;
  */
 interface SearchInterface
 {
-    public function search(Search $search);
+    public function search(Search $search, $columns = ['*']);
 }

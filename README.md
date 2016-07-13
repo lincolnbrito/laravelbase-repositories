@@ -5,6 +5,11 @@
 Structure (proposal)
 ```
    Domain
+   |
+   |__Dto
+   |  |
+   |  |__PersonSearch.php
+   |
    |__Models
    |   |__Person.php
    |
@@ -33,8 +38,10 @@ use LincolnBrito\LaravelBaseRepositories\Eloquent\Repository;
 
 class Person Repository extends Repository
 {
+    //fields to return on query
     protected $fields = ['name','age','state'];
 
+    //model class
     public function model()
     {
         return Person::class;
@@ -42,21 +49,51 @@ class Person Repository extends Repository
 }
 ```
 
-Criteria
+Criterias
+
+*Age*
 ```php
 use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
 
 class Age extends Criteria
 {
+    //wich values the criteria will store
     protected $fill = ['age'];
 
     public function apply($model, Repository $repository) {
-        $query = $model->where('age','>=', "%{$this->age}%");                       
+        $query = $model->where('age','>=', $this->age);                       
         return $query;
     }
 }
 ```
+
+*Name*
+```php
+use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
+use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
+
+class Name extends Criteria
+{
+    protected $fill = ['name'];
+
+    public function apply($model, Repository $repository) {
+        $query = $model->where('name','LIKE', "%{$this->age}%");                       
+        return $query;
+    }
+}
+```
+
+Search
+```php
+use LincolnBrito\LaravelBaseRepositories\Search\Search;
+
+class PersonSearch extends Search {
+    //control which param are used to search
+    protected $fill = ['name','age'];
+}
+```
+
 
 ### Pushing criterias
 
@@ -73,6 +110,22 @@ Pass param
 ```
 
 
+### Filter
+
+```php
+    
+    //Laravel DI
+    public function __construct(PersonRepository $personRepository, PersonSearch $search){
+        $this->personRepository = $personRepository;
+        $this->search = $search;
+    }
+    
+    ...
+    $this->search->setParams($request->all());
+    $pessoas = $this->pessoaRepository->search($this->search,['name']);
+```
+
 ## Todo
-- [ ] Load criteria automatically based on request
+- [x] Load criteria automatically based on request
+- [ ] Implement default fields to return on query (Repository)
 - [ ] Implement unit tests 

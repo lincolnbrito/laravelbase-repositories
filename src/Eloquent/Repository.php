@@ -193,15 +193,15 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface, Sea
 
     /**
      * @param Search $search
+     * @param array $columns
      * @return $this
-     * @internal param Request $request
      */
-    public function search(Search $search)
+    public function search(Search $search, $columns = ['*'])
     {
         $search->apply($this);
         $this->applyCriteria();
 
-        return $this->model->get();
+        return $this->model->get($columns);
     }
 
     /**
