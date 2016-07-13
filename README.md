@@ -59,7 +59,7 @@ use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Reposi
 class Age extends Criteria
 {
     //wich values the criteria will store
-    protected $fill = ['age'];
+    protected $fill = ['age','name'];
 
     public function apply($model, Repository $repository) {
         $query = $model->where('age','>=', $this->age);                       
@@ -99,14 +99,14 @@ class PersonSearch extends Search {
 
 Get param from request
 ```php
-   $this->pessoaRepository->pushCriteria(new Age($request->all()));    
+   $this->personRepository->pushCriteria(new Age($request->all()));    
 ```
 
 OR
 
 Pass param
 ```php
-   $this->pessoaRepository->pushCriteria(new Age(["age"=>18]));    
+   $this->personRepository->pushCriteria(new Age(["age"=>18]));    
 ```
 
 
@@ -134,5 +134,6 @@ $this->personRepository->skipCriteria(true);
 
 ## Todo
 - [x] Load criteria automatically based on request
+- [ ] Implement default pagination to result
 - [ ] Implement default fields to return on query (Repository)
 - [ ] Implement unit tests 
