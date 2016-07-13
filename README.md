@@ -28,7 +28,7 @@ class Person extends Model
 ```
 
 Repository
-```
+```php
 use LincolnBrito\LaravelBaseRepositories\Eloquent\Repository;
 
 class Person Repository extends Repository
@@ -44,7 +44,7 @@ class Person Repository extends Repository
 ```
 
 Criteria
-```
+```php
 use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
 
@@ -67,14 +67,14 @@ class Age extends Criteria {
 ### Pushing criterias
 
 Get param from request
-```
+```php
    $this->pessoaRepository->pushCriteria(new Age($request->all()));    
 ```
 
 OR
 
 Pass param
-```
+```php
    $this->pessoaRepository->pushCriteria(new Age(["age"=>18]));    
 ```
 
