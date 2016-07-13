@@ -1,7 +1,6 @@
 <?php
 namespace LincolnBrito\LaravelBaseRepositories\Contracts;
 
-use Illuminate\Http\Request;
 use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 
 /**
@@ -38,11 +37,5 @@ interface CriteriaInterface
      * @return mixed
      */
     public function applyCriteria();
-
-    /**
-     * @param Request $request
-     * @return mixed
-     */
-    public function search(Request $request);
 
 }

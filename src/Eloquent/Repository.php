@@ -2,8 +2,9 @@
 namespace LincolnBrito\LaravelBaseRepositories\Eloquent;
 
 use LincolnBrito\LaravelBaseRepositories\Contracts\CriteriaInterface;
-use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
+use LincolnBrito\LaravelBaseRepositories\Contracts\SearchInterface;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface;
+use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Exceptions\RepositoryException;
 use LincolnBrito\LaravelBaseRepositories\Exceptions\CriteriaException;
 
@@ -11,12 +12,13 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container as App;
+use LincolnBrito\LaravelBaseRepositories\Search\Search;
 
 /**
  * Class Repository
  * @package LincolnBrito\LaravelBaseRepositories\Eloquent
  */
-abstract class Repository implements RepositoryInterface, CriteriaInterface
+abstract class Repository implements RepositoryInterface, CriteriaInterface, SearchInterface
 {
 
     /** @var  \Illuminate\Database\Eloquent\Model */
@@ -190,22 +192,16 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
-     * @param Request $request
+     * @param Search $search
      * @return $this
-     * @throws CriteriaException
+     * @internal param Request $request
      */
-    public function search(Request $request)
+    public function search(Search $search)
     {
-        $namespace = substr(get_called_class(), 0, strrpos(get_called_class(), '\\')) . "\\Criterias\\";
+        $search->apply($this);
+        $this->applyCriteria();
 
-        foreach ($request->all() as $criteriaName => $value) {
-            $className = $namespace . str_replace(' ', '', ucwords(str_replace('_', ' ', $criteriaName)));
-            if (!class_exists($className))
-                throw new CriteriaException("The criteria class $className doesn't exists");
-            $this->pushCriteria($this->app->make($className, [$value]));
-        }
-
-        return $this;
+        return $this->model->get();
     }
 
     /**
