@@ -71,7 +71,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface {
 
     /**
      * @param array $data
-     * @return static
+     * @return Model
      */
     public function create(array $data) {
         return $this->model->create($data);
@@ -117,7 +117,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface {
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder | RepositoryException;
      * @throws RepositoryException
      */
     public function makeModel() {
