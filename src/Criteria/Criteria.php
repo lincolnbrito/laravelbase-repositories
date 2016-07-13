@@ -4,7 +4,8 @@ namespace LincolnBrito\LaravelBaseRepositories\Criteria;
 use Illuminate\Http\Request;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
 
-abstract class Criteria {
+abstract class Criteria
+{
 
     /**
      * @param $model

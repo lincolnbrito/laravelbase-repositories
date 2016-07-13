@@ -4,7 +4,8 @@ namespace LincolnBrito\LaravelBaseRepositories\Criteria\Criterias;
 use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
 
-class GreaterThanCriteria extends Criteria {
+class GreaterThanCriteria extends Criteria
+{
 
     /** @var  string */
     protected $attribute;
@@ -17,7 +18,8 @@ class GreaterThanCriteria extends Criteria {
      * @param $atribute
      * @param $value
      */
-    public function __construct($atribute, $value){
+    public function __construct($atribute, $value)
+    {
         $this->attribute = $atribute;
         $this->value = $value;
     }
@@ -27,7 +29,8 @@ class GreaterThanCriteria extends Criteria {
      * @param Repository $repository
      * @return mixed
      */
-    public function apply($model, Repository $repository) {
+    public function apply($model, Repository $repository)
+    {
         $query = $model->where($this->attribute, '>', $this->value);
         return $query;
     }

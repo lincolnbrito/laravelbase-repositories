@@ -1,6 +1,7 @@
 <?php
 namespace LincolnBrito\LaravelBaseRepositories\Exceptions;
 
-class CriteriaException extends \Exception{
+class CriteriaException extends \Exception
+{
 
 }

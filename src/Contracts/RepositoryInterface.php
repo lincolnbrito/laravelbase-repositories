@@ -5,7 +5,8 @@ namespace LincolnBrito\LaravelBaseRepositories\Contracts;
  * Interface RepositoryInterface
  * @package LincolnBrito\LaravelBaseRepositories\Contracts
  */
-interface RepositoryInterface {
+interface RepositoryInterface
+{
 
     /**
      * @param array $columns

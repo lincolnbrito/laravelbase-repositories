@@ -8,13 +8,14 @@ use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
  * Class CriteriaInterface
  * @package LincolnBrito\LaravelBaseRepositories\Contracts
  */
-interface CriteriaInterface {
+interface CriteriaInterface
+{
 
     /**
      * @param bool $status
      * @return mixed
      */
-    public function skipCriteria( $status = true );
+    public function skipCriteria($status = true);
 
     /**
      * @return mixed
@@ -25,13 +26,13 @@ interface CriteriaInterface {
      * @param Criteria $criteria
      * @return mixed
      */
-    public function getByCriteria( Criteria $criteria );
+    public function getByCriteria(Criteria $criteria);
 
     /**
      * @param Criteria $criteria
      * @return mixed
      */
-    public function pushCriteria( Criteria $criteria);
+    public function pushCriteria(Criteria $criteria);
 
     /**
      * @return mixed
@@ -42,6 +43,6 @@ interface CriteriaInterface {
      * @param Request $request
      * @return mixed
      */
-    public function search( Request $request );
+    public function search(Request $request);
 
 }
