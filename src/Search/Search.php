@@ -8,39 +8,28 @@ use LincolnBrito\LaravelBaseRepositories\Exceptions\CriteriaException;
 
 class Search
 {
-    /** @var  App */
-    private $app;
-
     /** @var array */
     protected $params;
-
     /** @var  array */
     protected $fill = [];
+    /** @var  App */
+    private $app;
 
     /**
      * Criteria constructor.
      * @param App $app
      * @param array $values
      */
-    public function __construct(App $app, $values = []){
+    public function __construct(App $app, $values = [])
+    {
         $this->app = $app;
 
-        if(is_array($values)){
-            foreach ($values as $key => $val){
-                if(in_array($key, $this->fill))
+        if (is_array($values)) {
+            foreach ($values as $key => $val) {
+                if (in_array($key, $this->fill))
                     $this->params[$key] = $val;
             }
         }
-    }
-
-    /**
-     * @param $name
-     * @param $value
-     */
-    public function __set($name, $value)
-    {
-        if(in_array($name, $this->fill))
-            $this->params[$name] = $value;
     }
 
     /**
@@ -55,13 +44,24 @@ class Search
     }
 
     /**
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        if (in_array($name, $this->fill))
+            $this->params[$name] = $value;
+    }
+
+    /**
      * Override params
      * @param $values
      */
-    public function setParams($values){
-        if(is_array($values)){
-            foreach ($values as $key => $val){
-                if(in_array($key, $this->fill))
+    public function setParams($values)
+    {
+        if (is_array($values)) {
+            foreach ($values as $key => $val) {
+                if (in_array($key, $this->fill))
                     $this->params[$key] = $val;
             }
         }
@@ -72,10 +72,11 @@ class Search
      * @return $this|void
      * @throws CriteriaException
      */
-    public function apply(Repository $repository){
+    public function apply(Repository $repository)
+    {
         $namespace = substr(get_class($repository), 0, strrpos(get_class($repository), '\\')) . "\\Criterias\\";
 
-        if(empty($this->params))
+        if (empty($this->params))
             return;
 
         foreach ($this->params as $criteriaName => $value) {
