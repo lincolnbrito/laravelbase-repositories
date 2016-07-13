@@ -122,8 +122,15 @@ Pass param
     
     ...
     $this->search->setParams($request->all());
-    $pessoas = $this->pessoaRepository->search($this->search,['name']);
+    $people = $this->personRepository->search($this->search,['name']);
 ```
+
+### Reset filters
+
+```php
+$this->personRepository->skipCriteria(true);
+```
+
 
 ## Todo
 - [x] Load criteria automatically based on request
