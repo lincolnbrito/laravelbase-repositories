@@ -99,7 +99,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface, Sea
      */
     public function applyCriteria()
     {
-        if ($this->skipCriteria() === true)
+        if ($this->skipCriteria === true)
             return $this;
 
         foreach ($this->getCriteria() as $criteria) {

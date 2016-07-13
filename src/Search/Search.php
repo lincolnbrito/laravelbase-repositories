@@ -69,6 +69,7 @@ class Search
 
     /**
      * @param Repository $repository
+     * @return $this|void
      * @throws CriteriaException
      */
     public function apply(Repository $repository){
