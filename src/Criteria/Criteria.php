@@ -13,9 +13,11 @@ abstract class Criteria
      * @param $values
      */
     public function __construct($values){
-        foreach ($values as $key => $val){
-            if(in_array($key, $this->fill))
-                $this->values[$key] = $val;
+        if(is_array($values)){
+            foreach ($values as $key => $val){
+                if(in_array($key, $this->fill))
+                    $this->values[$key] = $val;
+            }
         }
     }
 
@@ -35,8 +37,9 @@ abstract class Criteria
      */
     public function __get($name)
     {
-        if(in_array($name, $this->fill))
-            return $this->values[$name];
+        if (in_array($name, $this->fill))
+            return isset($this->values[$name]) ? $this->values[$name] : null;
+
     }
 
     /**
