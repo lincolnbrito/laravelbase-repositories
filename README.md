@@ -7,9 +7,13 @@ Structure (proposal)
    Domain
    |__Models
    |   |__Person.php
+   |
    |__Repositories
+      |  
       |__Criterias
+      |   |
       |   |__Age.php
+      |
       |__PersonRepository.php
 ```
 
