@@ -1,6 +1,7 @@
 <?php
 namespace LincolnBrito\LaravelBaseRepositories\Criteria;
 
+use Illuminate\Database\Eloquent\Model;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
 
 abstract class Criteria
@@ -43,9 +44,9 @@ abstract class Criteria
     }
 
     /**
-     * @param $model
+     * @param Model $model
      * @param Repository $repository
      * @return mixed
      */
-    public abstract function apply($model, Repository $repository);
+    abstract public function apply(Model $model, Repository $repository);
 }
