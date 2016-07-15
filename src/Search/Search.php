@@ -1,41 +1,31 @@
 <?php
 namespace LincolnBrito\LaravelBaseRepositories\Search;
 
-use Illuminate\Container\Container as App;
+use Illuminate\Database\Eloquent\Model;
 use LincolnBrito\LaravelBaseRepositories\Contracts\CriteriaInterface as Repository;
-use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface;
-use LincolnBrito\LaravelBaseRepositories\Exceptions\CriteriaException;
-
 
 abstract class Search
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $params;
-    /** @var  array */
-    protected $fill = [];
-    /** @var  App */
-    private $app;
-
-    protected $model;
-
-    protected $repository;
 
     /**
-     * Criteria constructor.
-     * @param App $app
-     * @param array $values
+     * @var array
      */
-    public function __construct(App $app, $values = [])
-    {
-        $this->app = $app;
+    protected $fill = [];
 
-        if (is_array($values)) {
-            foreach ($values as $key => $val) {
-                if (in_array($key, $this->fill))
-                    $this->params[$key] = $val;
-            }
-        }
-    }
+    /**
+     * @var Model
+     */
+    protected $model;
+
+    /**
+     * @var Repository
+     */
+    protected $repository;
+
 
     /**
      * @param $name
