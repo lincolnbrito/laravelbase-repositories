@@ -31,11 +31,12 @@ abstract class Repository extends AbstractRepository implements RepositoryInterf
     /**
      * BaseRepository constructor.
      * @param App $app
-     * @param Collection $criterias
      */
-    public function __construct(App $app, Collection $criterias)
+    public function __construct(App $app)
     {
-        $this->criterias = $criterias;
+        $this->criterias = new Collection();
+        $this->resetScope();
+        
         parent::__construct($app);
     }
 
