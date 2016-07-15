@@ -3,10 +3,11 @@ namespace LincolnBrito\LaravelBaseRepositories\Search;
 
 use Illuminate\Container\Container as App;
 use LincolnBrito\LaravelBaseRepositories\Contracts\CriteriaInterface as Repository;
+use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface;
 use LincolnBrito\LaravelBaseRepositories\Exceptions\CriteriaException;
 
 
-class Search
+abstract class Search
 {
     /** @var array */
     protected $params;
@@ -14,6 +15,10 @@ class Search
     protected $fill = [];
     /** @var  App */
     private $app;
+
+    protected $model;
+
+    protected $repository;
 
     /**
      * Criteria constructor.
@@ -65,25 +70,40 @@ class Search
                     $this->params[$key] = $val;
             }
         }
+
     }
 
     /**
+     * @param $model
      * @param Repository $repository
-     * @return $this|void
-     * @throws CriteriaException
      */
-    public function apply(Repository $repository)
-    {
-        $namespace = substr(get_class($repository), 0, strrpos(get_class($repository), '\\')) . "\\Criterias\\";
-
-        if (empty($this->params))
-            return;
-
-        foreach ($this->params as $criteriaName => $value) {
-            $className = $namespace . str_replace(' ', '', ucwords(str_replace('_', ' ', $criteriaName)));
-            if (!class_exists($className))
-                throw new CriteriaException("The criteria class $className doesn't exists");
-            $repository->pushCriteria($this->app->make($className, [$this->params]));
-        }
+    public function buildDefaultCriterias($model, Repository $repository){
     }
+
+    /**
+     * @param $model
+     * @param Repository $repository
+     * @return mixed
+     */
+    abstract public function buidCriterias($model, Repository $repository);
+
+//    /**
+//     * @param Repository $repository
+//     * @return $this|void
+//     * @throws CriteriaException
+//     */
+//    public function apply(Repository $repository)
+//    {
+//        $namespace = substr(get_class($repository), 0, strrpos(get_class($repository), '\\')) . "\\Criterias\\";
+//
+//        if (empty($this->params))
+//            return;
+//
+//        foreach ($this->params as $criteriaName => $value) {
+//            $className = $namespace . str_replace(' ', '', ucwords(str_replace('_', ' ', $criteriaName)));
+//            if (!class_exists($className))
+//                throw new CriteriaException("The criteria class $className doesn't exists");
+//            $repository->pushCriteria($this->app->make($className, [$this->params]));
+//        }
+//    }
 }

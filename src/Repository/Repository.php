@@ -83,9 +83,14 @@ abstract class Repository extends AbstractRepository implements RepositoryInterf
             return $this;
 
         foreach ($this->getCriteria() as $criteria) {
-            if ($criteria instanceof Criteria)
-                $this->model = $criteria->apply($this->model, $this);
+            if ($criteria instanceof Criteria) {
+                $model = $criteria->apply($this->model, $this);
+
+                $this->setModel($model);
+            }
         }
+
+        $this->setModel($this->getModel());
 
         return $this;
     }
@@ -203,11 +208,15 @@ abstract class Repository extends AbstractRepository implements RepositoryInterf
      */
     public function search(Search $search, $columns = ['*'])
     {
-        $search->apply($this);
+        $search->buildDefaultCriterias($this->model, $this);
+        $search->buidCriterias($this->model, $this);
         $this->applyCriteria();
 
-        return $this->model->get($columns);
+        return $this;
     }
 
 
+    public function debugSql(){
+        return $this->model->toSql();
+    }
 }
