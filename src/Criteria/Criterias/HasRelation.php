@@ -1,7 +1,6 @@
 <?php
 namespace LincolnBrito\LaravelBaseRepositories\Criteria\Criterias;
 
-use Illuminate\Database\Eloquent\Model;
 use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
 
@@ -20,7 +19,7 @@ class HasRelation extends Criteria
         $this->value = $value;
     }
 
-    public function apply(Model $model, Repository $repository)
+    public function apply($model, Repository $repository)
     {
         return $model->has($this->relation, $this->operator, $this->value);
     }

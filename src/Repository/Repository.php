@@ -1,48 +1,57 @@
 <?php
-namespace LincolnBrito\LaravelBaseRepositories\Eloquent;
+namespace LincolnBrito\LaravelBaseRepositories\Repository;
 
-use LincolnBrito\LaravelBaseRepositories\Contracts\CriteriaInterface;
-use LincolnBrito\LaravelBaseRepositories\Contracts\SearchInterface;
-use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface;
-use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
-use LincolnBrito\LaravelBaseRepositories\Exceptions\RepositoryException;
-use LincolnBrito\LaravelBaseRepositories\Exceptions\CriteriaException;
-
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container as App;
 use LincolnBrito\LaravelBaseRepositories\Search\Search;
 
+use LincolnBrito\LaravelBaseRepositories\Contracts\CriteriaInterface;
+use LincolnBrito\LaravelBaseRepositories\Contracts\SearchInterface;
+use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface;
+use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
+
 /**
  * Class Repository
  * @package LincolnBrito\LaravelBaseRepositories\Eloquent
  */
-abstract class Repository implements RepositoryInterface, CriteriaInterface, SearchInterface
+abstract class Repository extends AbstractRepository implements RepositoryInterface, CriteriaInterface, SearchInterface
 {
 
-    /** @var  \Illuminate\Database\Eloquent\Model */
-    protected $model;
-    /** @var Collection */
-    protected $criteria;
-    /** @var bool */
-    protected $skipCriteria = false;
-    /** @var  App */
-    private $app;
+    /**
+     * @var Collection
+     */
+    protected $criterias;
 
     /**
-     * Repository constructor.
-     *
-     * @param App $app
-     * @param Collection $collection
+     * @var bool
      */
-    public function __construct(App $app, Collection $collection)
+    protected $skipCriteria = false;
+
+    /**
+     * BaseRepository constructor.
+     * @param App $app
+     * @param Collection $criterias
+     */
+    public function __construct(App $app, Collection $criterias)
     {
-        $this->app = $app;
-        $this->criteria = $collection;
-        $this->resetScope();
-        $this->makeModel();
+        $this->criterias = $criterias;
+        parent::__construct($app);
     }
+
+    /**
+     * @return mixed
+     */
+    final public function getModelClass()
+    {
+        return $this->model();
+    }
+
+    /**
+     * @return mixed
+     */
+    abstract public function model();
+
 
     /**
      * @return $this
@@ -64,37 +73,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface, Sea
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder | RepositoryException;
-     * @throws RepositoryException
-     */
-    public function makeModel()
-    {
-        $model = $this->app->make($this->model());
-
-        if (!$model instanceof Model)
-            return new RepositoryException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
-
-        return $this->model = $model->newQuery();
-    }
-
-    /**
-     * Specify Model class name
-     *
-     * @return mixed
-     */
-    abstract function model();
-
-    /**
-     * @param array $columns
-     * @return mixed
-     */
-    public function all($columns = array('*'))
-    {
-        $this->applyCriteria();
-        return $this->model->get($columns);
-    }
-
-    /**
+     * Apply a criteria to repository
      * @return $this
      */
     public function applyCriteria()
@@ -111,11 +90,35 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface, Sea
     }
 
     /**
+     * Get all criterias
+     *
      * @return Collection
      */
     public function getCriteria()
     {
-        return $this->criteria;
+        return $this->criterias;
+    }
+
+    /**
+     * Push a criteria to repository
+     *
+     * @param Criteria $criteria
+     * @return $this
+     */
+    public function pushCriteria(Criteria $criteria)
+    {
+        $this->criterias->push($criteria);
+        return $this;
+    }
+
+    /**
+     * @param array $columns
+     * @return mixed
+     */
+    public function all($columns = array('*'))
+    {
+        $this->applyCriteria();
+        return $this->model->get($columns);
     }
 
     /**
@@ -204,13 +207,5 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface, Sea
         return $this->model->get($columns);
     }
 
-    /**
-     * @param Criteria $criteria
-     * @return $this
-     */
-    public function pushCriteria(Criteria $criteria)
-    {
-        $this->criteria->push($criteria);
-        return $this;
-    }
+
 }

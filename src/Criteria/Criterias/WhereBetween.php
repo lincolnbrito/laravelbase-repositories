@@ -1,7 +1,6 @@
 <?php
 namespace LincolnBrito\LaravelBaseRepositories\Criteria\Criterias;
 
-use Illuminate\Database\Eloquent\Model;
 use LincolnBrito\LaravelBaseRepositories\Criteria\Criteria;
 use LincolnBrito\LaravelBaseRepositories\Contracts\RepositoryInterface as Repository;
 
@@ -17,7 +16,7 @@ class WhereBetween extends Criteria
         $this->values = $values;
     }
 
-    public function apply(Model $model, Repository $repository)
+    public function apply($model, Repository $repository)
     {
         return $model->whereBetween($this->column, $this->value);
     }
