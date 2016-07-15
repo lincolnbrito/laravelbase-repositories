@@ -112,6 +112,16 @@ abstract class Repository extends AbstractRepository implements RepositoryInterf
     }
 
     /**
+     * @param Criteria $criteria
+     * @return $this
+     */
+    public function getByCriteria(Criteria $criteria)
+    {
+        $this->model = $criteria->apply($this->model, $this);
+        return $this;
+    }
+
+    /**
      * @param array $columns
      * @return mixed
      */
@@ -184,15 +194,6 @@ abstract class Repository extends AbstractRepository implements RepositoryInterf
         return $this->model->where($attribute, '=', $value)->get($columns);
     }
 
-    /**
-     * @param Criteria $criteria
-     * @return $this
-     */
-    public function getByCriteria(Criteria $criteria)
-    {
-        $this->model = $criteria->apply($this->model, $this);
-        return $this;
-    }
 
     /**
      * @param Search $search
