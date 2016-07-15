@@ -36,7 +36,7 @@ abstract class Repository extends AbstractRepository implements RepositoryInterf
     {
         $this->criterias = new Collection();
         $this->resetScope();
-        
+
         parent::__construct($app);
     }
 

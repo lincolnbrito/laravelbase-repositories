@@ -18,6 +18,6 @@ class WhereBetween extends Criteria
 
     public function apply($model, Repository $repository)
     {
-        return $model->whereBetween($this->column, $this->value);
+        return $model->whereBetween($this->column, $this->values);
     }
 }
