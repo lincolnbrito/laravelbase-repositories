@@ -146,7 +146,10 @@ abstract class Repository extends AbstractRepository implements RepositoryInterf
     public function paginate($perPage = 15, $columns = array('*'), $persist = array())
     {
         $this->applyCriteria();
-        $paginate = $this->model->paginate($perPage, $columns);
+        $paginate = $this->model->paginate(
+            ($perPage > -1) ? intval($perPage) : 0,
+            $columns
+        );
         if(!empty($persist)){
             $paginate->appends($persist);
         }
