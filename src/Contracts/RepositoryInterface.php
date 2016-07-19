@@ -17,9 +17,10 @@ interface RepositoryInterface
     /**
      * @param int $perPage
      * @param array $columns
+     * @param mixed $persit
      * @return mixed
      */
-    public function paginate($perPage = 15, $columns = array('*'));
+    public function paginate($perPage = 15, $columns = array('*'), $persit = array());
 
     /**
      * @param array $data
